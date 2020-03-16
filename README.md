@@ -1,1 +1,1 @@
-# project2-luscious-locks-backend
+# Cool Cats Club
