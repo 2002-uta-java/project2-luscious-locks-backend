@@ -6,7 +6,7 @@
 	<session-factory>
 	
 	<!-- credentials to connect to our db -->
-	<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/proj2</property>
+	<property name="hibernate.connection.url">jdbc:postgresql://cool-cats-club-db.c7c25tedatb5.us-east-2.rds.amazonaws.com:5432/proj2</property>
 	<property name="hibernate.connection.username">proj2</property>
 	<property name="hibernate.connection.password">securepassword</property>
 	
