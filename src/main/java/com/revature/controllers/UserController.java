@@ -27,9 +27,13 @@ public class UserController {
 		return userService.getAll();
 	}
 	
-	@GetMapping("/users/{id}")
-	public User getUserById(@PathVariable("id")int id) {
-		return userService.getById(id);
+	@GetMapping("/users/{idOrUsername}")
+	public User getUser(@PathVariable("idOrUsername")String idOrUsername) {
+		if(idOrUsername.matches("^\\d+$")) {
+			return userService.getById(Integer.valueOf(idOrUsername));
+		} else {
+			return userService.getByUsername(idOrUsername);
+		}
 	}
 	
 	@PostMapping("/users")
