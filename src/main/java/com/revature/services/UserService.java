@@ -30,4 +30,15 @@ public class UserService {
 		u.setPassword(null);
 		return u;
 	}
+	
+	public boolean createUser(User u) {
+		return userDAO.createUser(u);
+	}
+
+	public User updateUser(User u) {
+		User updatedUser = userDAO.updateUser(u);
+		updatedUser.setPassword(null);
+		return updatedUser;
+	}
+
 }
