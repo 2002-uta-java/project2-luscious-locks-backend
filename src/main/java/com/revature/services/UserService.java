@@ -19,14 +19,18 @@ public class UserService {
 
 	public User getByUsername(String username) {
 		User u = userDAO.getByUsername(username);
-		// TODO handle unfound users
+		if(u == null) {
+			return null;
+		}
 		u.setPassword(null);
 		return u;
 	}
 
 	public User getById(int id) {
 		User u = userDAO.getById(id);
-		// TODO handle case of user not found
+		if(u == null) {
+			return null;
+		}
 		u.setPassword(null);
 		return u;
 	}
