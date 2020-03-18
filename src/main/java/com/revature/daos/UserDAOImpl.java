@@ -3,6 +3,7 @@ package com.revature.daos;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.revature.models.User;
@@ -46,6 +47,29 @@ public class UserDAOImpl implements UserDAO {
 	public User getByUsernameAndPassword(String username, String password) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean createUser(User u) {
+		try(Session s = HibernateUtil.getSession()){
+			Transaction tx = s.beginTransaction();
+			s.save(u);
+			tx.commit();
+		}
+		catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public User updateUser(User u) {
+		try(Session s = HibernateUtil.getSession()){
+			Transaction tx = s.beginTransaction();
+			User updatedUser = (User) s.merge(u);
+			tx.commit();
+			return updatedUser;
+		}
 	}
 
 }
