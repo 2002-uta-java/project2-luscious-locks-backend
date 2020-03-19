@@ -14,7 +14,7 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false)
 	private String text;
 	private Boolean flagged;
 	@ManyToOne
