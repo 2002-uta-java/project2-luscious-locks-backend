@@ -25,6 +25,13 @@ public class UserService {
 		u.setPassword(null);
 		return u;
 	}
+	
+	public User getByUsernameAndPassword(String username, String password) {
+		User u = userDAO.getByUsernameAndPassword(username, password);
+		if(u == null) { return null; }
+		u.setPassword(null);
+		return u;
+	}
 
 	public User getById(int id) {
 		User u = userDAO.getById(id);
