@@ -18,15 +18,17 @@ public class Image implements Serializable{
 	private int id;
 	@Column(nullable=false)
 	private String url;
+	private boolean isAccepted;
 	
 	public Image() {
 		super();
 	}
 
-	public Image(int id, String url) {
+	public Image(int id, String url, boolean isAccepted) {
 		super();
 		this.id = id;
 		this.url = url;
+		this.isAccepted = isAccepted;
 	}
 
 	public int getId() {
@@ -44,12 +46,21 @@ public class Image implements Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public boolean isAccepted() {
+		return isAccepted;
+	}
+	
+	public void setAccepted(boolean isAccepted) {
+		this.isAccepted = isAccepted;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + id;
+		result = prime * result + (isAccepted ? 1231 : 1237);
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
@@ -65,6 +76,8 @@ public class Image implements Serializable{
 		Image other = (Image) obj;
 		if (id != other.id)
 			return false;
+		if (isAccepted != other.isAccepted)
+			return false;
 		if (url == null) {
 			if (other.url != null)
 				return false;
@@ -75,7 +88,7 @@ public class Image implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Image [id=" + id + ", url=" + url + "]";
+		return "Image [id=" + id + ", url=" + url + ", isAccepted=" + isAccepted + "]";
 	}
 	
 	
