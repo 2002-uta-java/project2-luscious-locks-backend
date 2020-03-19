@@ -27,8 +27,12 @@ public class UserDAOImpl implements UserDAO {
 			String hql = "from User where id = :id";
 			Query<User> userQuery = s.createQuery(hql, User.class);
 			userQuery.setParameter("id", id);
-			User user = userQuery.getSingleResult();
-			return user;
+			//User user = userQuery.getSingleResult();
+			List<User> users = userQuery.list();
+			if(users.size() == 0) {
+				return null;
+			}
+			return users.get(0);
 		}
 	}
 
@@ -38,15 +42,27 @@ public class UserDAOImpl implements UserDAO {
 			String hql = "from User where username = :username";
 			Query<User> userQuery = s.createQuery(hql, User.class);
 			userQuery.setParameter("username", username);
-			User user = userQuery.getSingleResult();
-			return user;
+			List<User> users = userQuery.list();
+			if(users.size() == 0) {
+				return null;
+			}
+			return users.get(0);
 		}
 	}
 
 	@Override
 	public User getByUsernameAndPassword(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		try (Session s = HibernateUtil.getSession()) {
+			String hql = "from User where username = :username and password = :password";
+			Query<User> userQuery = s.createQuery(hql, User.class);
+			userQuery.setParameter("username", username);
+			userQuery.setParameter("password", password);
+			List<User> users = userQuery.list();
+			if(users.size() == 0) {
+				return null;
+			}
+			return users.get(0);
+		}
 	}
 
 	@Override
