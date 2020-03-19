@@ -21,8 +21,8 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/users")
-	public List<User> getAllUsers() {
-		return userService.getAll();
+	public ResponseEntity<List<User>> getAllUsers() {
+		return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
 	}
 
 	@GetMapping("/users/{idOrUsername}")
@@ -51,8 +51,9 @@ public class UserController {
 		}
 	}
 
+	// TODO should this be /users/{id} instead?
 	@PutMapping("/users")
-	public User updateUser(@RequestBody User u) {
-		return userService.updateUser(u);
+	public ResponseEntity<User> updateUser(@RequestBody User u) {
+		return new ResponseEntity<>(userService.updateUser(u), HttpStatus.OK);
 	}
 }
