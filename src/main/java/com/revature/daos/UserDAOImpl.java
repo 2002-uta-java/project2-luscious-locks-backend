@@ -17,6 +17,9 @@ public class UserDAOImpl implements UserDAO {
 			String hql = "from User";
 			Query<User> userQuery = s.createQuery(hql, User.class);
 			List<User> users = userQuery.list();
+			for(User u: users) {
+				u.setImages(null);
+			}
 			return users;
 		}
 	}
@@ -32,6 +35,7 @@ public class UserDAOImpl implements UserDAO {
 			if(users.size() == 0) {
 				return null;
 			}
+			users.get(0).getImages().size();
 			return users.get(0);
 		}
 	}
@@ -46,6 +50,7 @@ public class UserDAOImpl implements UserDAO {
 			if(users.size() == 0) {
 				return null;
 			}
+			users.get(0).getImages().size();
 			return users.get(0);
 		}
 	}
@@ -61,6 +66,7 @@ public class UserDAOImpl implements UserDAO {
 			if(users.size() == 0) {
 				return null;
 			}
+			users.get(0).getImages().size();
 			return users.get(0);
 		}
 	}

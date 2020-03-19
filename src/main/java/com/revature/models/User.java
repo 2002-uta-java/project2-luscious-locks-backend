@@ -1,10 +1,14 @@
 package com.revature.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,8 @@ public class User {
 	private String password;
 	private boolean canComment;
 	private boolean isBanned;
+	@OneToMany(fetch=FetchType.LAZY)
+	private List<Image> images;
 	
 	public int getId() {
 		return id;
@@ -48,6 +54,12 @@ public class User {
 	}
 	public void setBanned(boolean isBanned) {
 		this.isBanned = isBanned;
+	}
+	public List<Image> getImages() {
+		return images;
+	}
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 	@Override
 	public int hashCode() {

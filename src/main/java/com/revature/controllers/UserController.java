@@ -36,6 +36,7 @@ public class UserController {
 		if (u == null) {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
+		//u.setImages(null);
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 
