@@ -86,9 +86,22 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public User updateUser(User u) {
+		User oldUser = getById(u.getId());
+		if(u.getBanned() != null) {
+			oldUser.setBanned(u.getBanned());
+		}
+		if(u.getMuted() != null) {
+			oldUser.setMuted(u.getMuted());
+		}
+		if(u.getUsername() != null) {
+			oldUser.setUsername(u.getUsername());
+		}
+		if(u.getPassword() != null) {
+			oldUser.setPassword(u.getPassword());
+		}
 		try(Session s = HibernateUtil.getSession()){
 			Transaction tx = s.beginTransaction();
-			User updatedUser = (User) s.merge(u);
+			User updatedUser = (User) s.merge(oldUser);
 			tx.commit();
 			return updatedUser;
 		}

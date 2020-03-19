@@ -1,6 +1,9 @@
 package com.revature.controllers;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@GetMapping("/users")
 	public ResponseEntity<List<User>> getAllUsers() {
@@ -36,7 +40,7 @@ public class UserController {
 		if (u == null) {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
-		//u.setImages(null);
+		// u.setImages(null);
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 
@@ -52,9 +56,13 @@ public class UserController {
 		}
 	}
 
-	// TODO should this be /users/{id} instead?
-	@PutMapping("/users")
-	public ResponseEntity<User> updateUser(@RequestBody User u) {
+	@PutMapping("/users/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User u) {
+		logger.info("u.getId() = " + u.getId() + " id = " + id);
+		if (u.getId() > 0 && u.getId() != id) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		u.setId(id);
 		return new ResponseEntity<>(userService.updateUser(u), HttpStatus.OK);
 	}
 }
