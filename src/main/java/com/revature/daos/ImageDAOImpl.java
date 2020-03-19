@@ -25,6 +25,7 @@ public class ImageDAOImpl implements ImageDAO{
 		try(Session s = HibernateUtil.getSession()){
 			String hql = "from Image where id = :id";
 			Query<Image> imageQuery = s.createQuery(hql, Image.class);
+			imageQuery.setParameter("id", id);
 			return imageQuery.getSingleResult();
 		}
 	}
