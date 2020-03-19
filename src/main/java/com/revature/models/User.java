@@ -19,11 +19,11 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(nullable=false)
+	@Column(nullable=false, unique=true)
 	private String username;
 	private String password;
-	private boolean canComment;
-	private boolean isBanned;
+	private Boolean muted;
+	private Boolean banned;
 	@OneToMany(fetch=FetchType.LAZY)
 	private List<Image> images;
 	
@@ -45,17 +45,17 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public boolean isCanComment() {
-		return canComment;
+	public Boolean getMuted() {
+		return muted;
 	}
-	public void setCanComment(boolean canComment) {
-		this.canComment = canComment;
+	public void setMuted(Boolean muted) {
+		this.muted = muted;
 	}
-	public boolean isBanned() {
-		return isBanned;
+	public Boolean getBanned() {
+		return banned;
 	}
-	public void setBanned(boolean isBanned) {
-		this.isBanned = isBanned;
+	public void setBanned(Boolean banned) {
+		this.banned = banned;
 	}
 	public List<Image> getImages() {
 		return images;
@@ -67,9 +67,10 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (canComment ? 1231 : 1237);
+		result = prime * result + ((banned == null) ? 0 : banned.hashCode());
 		result = prime * result + id;
-		result = prime * result + (isBanned ? 1231 : 1237);
+		result = prime * result + ((images == null) ? 0 : images.hashCode());
+		result = prime * result + ((muted == null) ? 0 : muted.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -83,11 +84,22 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (canComment != other.canComment)
+		if (banned == null) {
+			if (other.banned != null)
+				return false;
+		} else if (!banned.equals(other.banned))
 			return false;
 		if (id != other.id)
 			return false;
-		if (isBanned != other.isBanned)
+		if (images == null) {
+			if (other.images != null)
+				return false;
+		} else if (!images.equals(other.images))
+			return false;
+		if (muted == null) {
+			if (other.muted != null)
+				return false;
+		} else if (!muted.equals(other.muted))
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -103,7 +115,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password
-				+ ", canComment=" + canComment + ", isBanned=" + isBanned + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", muted="
+				+ muted + ", banned=" + banned + ", images=" + images + "]";
 	}
 }
