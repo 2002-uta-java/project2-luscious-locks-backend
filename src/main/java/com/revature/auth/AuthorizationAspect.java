@@ -40,7 +40,10 @@ public class AuthorizationAspect {
 	//@Around("within(com.revature.controllers.*) && !execution(* com.revature.controllers.UserController.populate())")
 	//@Around("within(com.revature.controllers.*) && !within(com.revature.controllers.DebugController.*)")
 	//@Around("within(com.revature.controllers.*) && !within(com.revature.controller.UserController.populate)")
-	@Around("within(com.revature.controllers.*) && !execution(* com.revature.controllers.DebugController.populate())")
+	@Around("within(com.revature.controllers.*) && !execution(* com.revature.controllers.DebugController.populate())"
+			+ " && !execution(* com.revature.controllers.UserController.createUser(..))"
+			+ " && !execution(* com.revature.controllers.UserController.login(..))"
+			)
 	public Object authorizeRequest(ProceedingJoinPoint jp) throws Throwable {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes()).getRequest();
