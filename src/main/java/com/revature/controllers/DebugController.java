@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.revature.models.Image;
 import com.revature.models.User;
 import com.revature.utils.HibernateUtil;
 
+@CrossOrigin
 @RestController
 public class DebugController {
 	@GetMapping("/populate")
