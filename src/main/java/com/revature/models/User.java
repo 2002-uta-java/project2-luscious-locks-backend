@@ -24,9 +24,11 @@ public class User {
 	private String password;
 	private Boolean muted;
 	private Boolean banned;
-	@OneToMany(fetch=FetchType.LAZY)
-	private List<Image> images;
+	private Boolean moderator;
 	
+	public User() {
+		super();
+	}
 	public int getId() {
 		return id;
 	}
@@ -40,7 +42,8 @@ public class User {
 		this.username = username;
 	}
 	public String getPassword() {
-		return password;
+		//return password;
+		return null;
 	}
 	public void setPassword(String password) {
 		this.password = password;
@@ -57,11 +60,12 @@ public class User {
 	public void setBanned(Boolean banned) {
 		this.banned = banned;
 	}
-	public List<Image> getImages() {
-		return images;
+	
+	public Boolean getModerator() {
+		return moderator;
 	}
-	public void setImages(List<Image> images) {
-		this.images = images;
+	public void setModerator(Boolean moderator) {
+		this.moderator = moderator;
 	}
 	@Override
 	public int hashCode() {
@@ -69,7 +73,7 @@ public class User {
 		int result = 1;
 		result = prime * result + ((banned == null) ? 0 : banned.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((images == null) ? 0 : images.hashCode());
+		result = prime * result + ((moderator == null) ? 0 : moderator.hashCode());
 		result = prime * result + ((muted == null) ? 0 : muted.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -91,10 +95,10 @@ public class User {
 			return false;
 		if (id != other.id)
 			return false;
-		if (images == null) {
-			if (other.images != null)
+		if (moderator == null) {
+			if (other.moderator != null)
 				return false;
-		} else if (!images.equals(other.images))
+		} else if (!moderator.equals(other.moderator))
 			return false;
 		if (muted == null) {
 			if (other.muted != null)
@@ -113,9 +117,20 @@ public class User {
 			return false;
 		return true;
 	}
+	
+	public User(int id, String username, String password, Boolean muted, Boolean banned,
+			Boolean moderator) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.muted = muted;
+		this.banned = banned;
+		this.moderator = moderator;
+	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", muted="
-				+ muted + ", banned=" + banned + ", images=" + images + "]";
+				+ muted + ", banned=" + banned + ", moderator=" + moderator + "]";
 	}
 }
