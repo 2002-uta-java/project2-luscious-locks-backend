@@ -29,8 +29,8 @@ public class DebugController {
 			//List<Image> il1 = new Vector<>();
 			//il1.add(i1); il1.add(i2);
 			
-			User u1 = new User(0, "brian", "whatev", false, false, false);
-			User u2 = new User(0, "israel", "password", false, false, true);
+			User u1 = new User(0, "brian", "whatev", false, false, false, null);
+			User u2 = new User(0, "israel", "password", false, false, true, "you've been bad");
 			Image i1 = new Image(0, "https://i.imgur.com/26I32vb.jpg", true, "a wittle kitty", u1);
 			Image i2 = new Image(0, "https://i.imgur.com/XLfaJkK.jpg", false, "TWO KITTIES!!!!", u1);
 			s.save(u1);

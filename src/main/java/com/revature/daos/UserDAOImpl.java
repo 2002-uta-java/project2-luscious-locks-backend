@@ -92,6 +92,12 @@ public class UserDAOImpl implements UserDAO {
 		if(u.getPassword() != null) {
 			oldUser.setPassword(u.getPassword());
 		}
+		if(u.getWarning() != null) {
+			if("".equals(u.getWarning())) {
+				u.setWarning(null);
+			}
+			oldUser.setWarning(u.getWarning());
+		}
 		try(Session s = HibernateUtil.getSession()){
 			Transaction tx = s.beginTransaction();
 			User updatedUser = (User) s.merge(oldUser);
