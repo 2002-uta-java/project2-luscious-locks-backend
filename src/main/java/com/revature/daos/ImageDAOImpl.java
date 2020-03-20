@@ -66,9 +66,22 @@ public class ImageDAOImpl implements ImageDAO{
 
 	@Override
 	public Image updateImage(Image i) {
+		Image oldImage = getById(i.getId());
+		if(i.getAccepted() != null) {
+			oldImage.setAccepted(i.getAccepted());
+		}
+		if(i.getFlagged() != null) {
+			oldImage.setFlagged(i.getFlagged());
+		}
+		if(i.getDescription() != null) {
+			oldImage.setDescription(i.getDescription());
+		}
+		if(i.getUrl() != null) {
+			oldImage.setUrl(i.getUrl());
+		}
 		try(Session s = HibernateUtil.getSession()){
 			Transaction tx = s.beginTransaction();
-			Image updatedImage = (Image) s.merge(i);
+			Image updatedImage = (Image) s.merge(oldImage);
 			tx.commit();
 			return updatedImage;
 		}

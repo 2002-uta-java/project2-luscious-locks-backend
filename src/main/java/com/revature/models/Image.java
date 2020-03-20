@@ -27,6 +27,7 @@ public class Image implements Serializable{
 	private String description;
 	@ManyToOne
 	private User poster;
+	private Boolean flagged;
 
 	public Image() {
 		super();
@@ -39,6 +40,17 @@ public class Image implements Serializable{
 		this.accepted = accepted;
 		this.description = description;
 		this.poster = poster;
+	}
+
+	public Image(int id, String url, Boolean accepted, String description, User poster,
+			Boolean flagged) {
+		super();
+		this.id = id;
+		this.url = url;
+		this.accepted = accepted;
+		this.description = description;
+		this.poster = poster;
+		this.flagged = flagged;
 	}
 
 	public int getId() {
@@ -81,12 +93,21 @@ public class Image implements Serializable{
 		this.poster = poster;
 	}
 
+	public Boolean getFlagged() {
+		return flagged;
+	}
+
+	public void setFlagged(Boolean flagged) {
+		this.flagged = flagged;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((accepted == null) ? 0 : accepted.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((flagged == null) ? 0 : flagged.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((poster == null) ? 0 : poster.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
@@ -112,6 +133,11 @@ public class Image implements Serializable{
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (flagged == null) {
+			if (other.flagged != null)
+				return false;
+		} else if (!flagged.equals(other.flagged))
+			return false;
 		if (id != other.id)
 			return false;
 		if (poster == null) {
@@ -130,7 +156,7 @@ public class Image implements Serializable{
 	@Override
 	public String toString() {
 		return "Image [id=" + id + ", url=" + url + ", accepted=" + accepted + ", description="
-				+ description + ", poster=" + poster + "]";
+				+ description + ", poster=" + poster + ", flagged=" + flagged + "]";
 	}
 	
 	

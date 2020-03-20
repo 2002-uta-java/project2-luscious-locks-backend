@@ -78,9 +78,14 @@ public class ImageController {
 		}
 	}
 
-	@PutMapping("/images")
-	public Image updateImage(@RequestBody Image i) {
-		return imageService.updateImage(i);
+	@PutMapping("/images/{id}")
+	public ResponseEntity<Image> updateImage(@RequestBody Image i, @PathVariable("id")int id) {
+		if (i.getId() > 0 && i.getId() != id) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		i.setId(id);
+		return new ResponseEntity<>(imageService.updateImage(i), HttpStatus.OK);
+	
 	}
 
 	@DeleteMapping("/images")
