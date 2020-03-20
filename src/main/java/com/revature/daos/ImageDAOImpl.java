@@ -20,7 +20,17 @@ public class ImageDAOImpl implements ImageDAO{
 			return imageQuery.list();
 		}
 	}
-
+	
+	@Override
+	public List<Image> getAtOrAvoceRating(float rating) {
+		try(Session s = HibernateUtil.getSession()){
+			String sql = "select i.* from image i join rating r on i.id = r.image_id group by i.id having avg(r.rating) >= ?;";
+			Query<Image> imageQuery = s.createNativeQuery(sql, Image.class);
+			imageQuery.setParameter(1, rating);
+			return imageQuery.list();
+		}
+	}
+	
 	@Override
 	public Image getById(int id) {
 		try(Session s = HibernateUtil.getSession()){

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Image;
@@ -35,25 +36,29 @@ public class ImageController {
 	Logger logger = LoggerFactory.getLogger(ImageController.class);
 
 	@GetMapping("/images")
-	public List<Image> getAllImages() {
-		return imageService.getAll();
+	public List<Image> getAllImages(@RequestParam(name = "rating", required = false) Float rating) {
+		if (rating != null) {
+			return imageService.getAtOrAboveRating(rating);
+		} else {
+			return imageService.getAll();
+		}
 	}
 
 	@GetMapping("/images/{id}")
 	public ResponseEntity<Image> getImage(@PathVariable("id") int id) {
-		
+
 		Image i = imageService.getById(id);
 		logger.info("" + i);
-		if(i == null) {
+		if (i == null) {
 			return new ResponseEntity<Image>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Image>(i, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/users/{id}/images")
-	public ResponseEntity<List<Image>> getImagesForUser(@PathVariable("id")int id) {
+	public ResponseEntity<List<Image>> getImagesForUser(@PathVariable("id") int id) {
 		User poster = userService.getById(id);
-		if(poster == null) {
+		if (poster == null) {
 			return new ResponseEntity<List<Image>>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Image>>(imageService.getForUser(poster), HttpStatus.OK);

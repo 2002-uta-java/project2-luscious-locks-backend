@@ -13,4 +13,5 @@ public interface ImageDAO {
 	public Image updateImage(Image i);
 	public boolean deleteImage(Image i);
 	public List<Image> getForUser(User u);
+	public List<Image> getAtOrAvoceRating(float rating);
 }

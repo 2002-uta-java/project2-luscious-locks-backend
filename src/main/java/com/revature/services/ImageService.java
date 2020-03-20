@@ -37,4 +37,8 @@ public class ImageService {
 	public List<Image> getForUser(User poster) {
 		return imageDAO.getForUser(poster);
 	}
+
+	public List<Image> getAtOrAboveRating(float rating) {
+		return imageDAO.getAtOrAvoceRating(rating);
+	}
 }
