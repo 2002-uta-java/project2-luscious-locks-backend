@@ -3,6 +3,7 @@ package com.revature.daos;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.revature.models.User;
@@ -26,8 +27,11 @@ public class UserDAOImpl implements UserDAO {
 			String hql = "from User where id = :id";
 			Query<User> userQuery = s.createQuery(hql, User.class);
 			userQuery.setParameter("id", id);
-			User user = userQuery.getSingleResult();
-			return user;
+			List<User> users = userQuery.list();
+			if(users.isEmpty()) {
+				return null;
+			}
+			return users.get(0);
 		}
 	}
 
@@ -37,15 +41,63 @@ public class UserDAOImpl implements UserDAO {
 			String hql = "from User where username = :username";
 			Query<User> userQuery = s.createQuery(hql, User.class);
 			userQuery.setParameter("username", username);
-			User user = userQuery.getSingleResult();
-			return user;
+			List<User> users = userQuery.list();
+			if(users.isEmpty()) {
+				return null;
+			}
+			return users.get(0);
 		}
 	}
 
 	@Override
 	public User getByUsernameAndPassword(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		try (Session s = HibernateUtil.getSession()) {
+			String hql = "from User where username = :username and password = :password";
+			Query<User> userQuery = s.createQuery(hql, User.class);
+			userQuery.setParameter("username", username);
+			userQuery.setParameter("password", password);
+			List<User> users = userQuery.list();
+			if(users.size() == 0) {
+				return null;
+			}
+			return users.get(0);
+		}
+	}
+
+	@Override
+	public boolean createUser(User u) {
+		try(Session s = HibernateUtil.getSession()){
+			Transaction tx = s.beginTransaction();
+			s.save(u);
+			tx.commit();
+		}
+		catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public User updateUser(User u) {
+		User oldUser = getById(u.getId());
+		if(u.getBanned() != null) {
+			oldUser.setBanned(u.getBanned());
+		}
+		if(u.getMuted() != null) {
+			oldUser.setMuted(u.getMuted());
+		}
+		if(u.getUsername() != null) {
+			oldUser.setUsername(u.getUsername());
+		}
+		if(u.getPassword() != null) {
+			oldUser.setPassword(u.getPassword());
+		}
+		try(Session s = HibernateUtil.getSession()){
+			Transaction tx = s.beginTransaction();
+			User updatedUser = (User) s.merge(oldUser);
+			tx.commit();
+			return updatedUser;
+		}
 	}
 
 }
