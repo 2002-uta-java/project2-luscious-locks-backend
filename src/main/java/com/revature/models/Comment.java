@@ -22,6 +22,19 @@ public class Comment {
 	@ManyToOne
 	private Image image;
 	
+	public Comment() {
+		super();
+	}
+	
+	public Comment(int id, String text, Boolean flagged, User author, Image image) {
+		super();
+		this.id = id;
+		this.text = text;
+		this.flagged = flagged;
+		this.author = author;
+		this.image = image;
+	}
+
 	public int getId() {
 		return id;
 	}
