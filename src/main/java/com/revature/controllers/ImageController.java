@@ -2,6 +2,10 @@ package com.revature.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Image;
+import com.revature.models.User;
 import com.revature.services.ImageService;
 
 @CrossOrigin
@@ -23,41 +28,51 @@ public class ImageController {
 
 	@Autowired
 	private ImageService imageService;
-	
+
+	Logger logger = LoggerFactory.getLogger(ImageController.class);
+
 	@GetMapping("/images")
-	public List<Image> getAllImages(){
+	public List<Image> getAllImages() {
 		return imageService.getAll();
 	}
-	
+
 	@GetMapping("/images/{id}")
-	public Image getImage(@PathVariable("id")int id) {
-		return imageService.getById(id);
+	public ResponseEntity<Image> getImage(@PathVariable("id") int id) {
+		
+		Image i = imageService.getById(id);
+		logger.info("" + i);
+		if(i == null) {
+			return new ResponseEntity<Image>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Image>(i, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/images")
-	public ResponseEntity<String> createImage(@RequestBody Image i) {
+	public ResponseEntity<String> createImage(@RequestBody Image i, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		logger.info("current user = " + user);
+		i.setPoster(user);
 		boolean result = imageService.createImage(i);
-		//Debugging code
-		System.out.println("createImage returned " + result);
-		if(result) {
-			return new ResponseEntity<>("Added image " +  i.getId(), HttpStatus.CREATED);
+		logger.info("createImage returned " + result);
+		if (result) {
+			return new ResponseEntity<>("Added image " + i.getId(), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>("Could not add image", HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@PutMapping("/images")
 	public Image updateImage(@RequestBody Image i) {
 		return imageService.updateImage(i);
 	}
-	
+
 	@DeleteMapping("/images")
-	public ResponseEntity<String> deleteImage(@RequestBody Image i){
+	public ResponseEntity<String> deleteImage(@RequestBody Image i) {
 		boolean result = imageService.deleteImage(i);
-		//Debugging code
+		// Debugging code
 		System.out.println("deleteImage returned " + result);
-		if(result) {
-			return new ResponseEntity<>("Deleted image " +  i.getId(), HttpStatus.OK);
+		if (result) {
+			return new ResponseEntity<>("Deleted image " + i.getId(), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Could not delete image", HttpStatus.BAD_REQUEST);
 		}
