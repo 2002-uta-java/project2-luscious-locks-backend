@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.models.Image;
 import com.revature.models.User;
 import com.revature.services.ImageService;
+import com.revature.services.UserService;
 
 @CrossOrigin
 @RestController
@@ -28,6 +29,8 @@ public class ImageController {
 
 	@Autowired
 	private ImageService imageService;
+	@Autowired
+	private UserService userService;
 
 	Logger logger = LoggerFactory.getLogger(ImageController.class);
 
@@ -45,6 +48,15 @@ public class ImageController {
 			return new ResponseEntity<Image>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Image>(i, HttpStatus.OK);
+	}
+	
+	@GetMapping("/users/{id}/images")
+	public ResponseEntity<List<Image>> getImagesForUser(@PathVariable("id")int id) {
+		User poster = userService.getById(id);
+		if(poster == null) {
+			return new ResponseEntity<List<Image>>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<Image>>(imageService.getForUser(poster), HttpStatus.OK);
 	}
 
 	@PostMapping("/images")

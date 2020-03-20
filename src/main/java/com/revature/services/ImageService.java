@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.revature.daos.ImageDAO;
 import com.revature.daos.ImageDAOImpl;
 import com.revature.models.Image;
+import com.revature.models.User;
 
 @Service
 public class ImageService {
@@ -31,5 +32,9 @@ public class ImageService {
 	
 	public Image updateImage(Image i) {
 		return imageDAO.updateImage(i);
+	}
+
+	public List<Image> getForUser(User poster) {
+		return imageDAO.getForUser(poster);
 	}
 }

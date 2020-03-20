@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.revature.models.Image;
+import com.revature.models.User;
 import com.revature.utils.HibernateUtil;
 
 public class ImageDAOImpl implements ImageDAO{
@@ -30,6 +31,16 @@ public class ImageDAOImpl implements ImageDAO{
 		}
 	}
 
+	@Override
+	public List<Image> getForUser(User u) {
+		try(Session s = HibernateUtil.getSession()){
+			String hql = "from Image where poster = :poster";
+			Query<Image> imageQuery = s.createQuery(hql, Image.class);
+			imageQuery.setParameter("poster", u);
+			return imageQuery.list();
+		}
+	}
+	
 	@Override
 	public boolean createImage(Image i) {
 		try(Session s = HibernateUtil.getSession()){
@@ -65,5 +76,4 @@ public class ImageDAOImpl implements ImageDAO{
 		}
 		return true;
 	}
-
 }
