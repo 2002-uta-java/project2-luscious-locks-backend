@@ -54,7 +54,7 @@ public class CommentController {
 	}
 
 	@PostMapping("/images/{id}/comments")
-	public ResponseEntity<Comment> createComment(@RequestBody Comment c, @PathVariable("id") int id,
+	public ResponseEntity<String> createComment(@RequestBody Comment c, @PathVariable("id") int id,
 			HttpSession session) {
 		User author = (User) session.getAttribute("user");
 		Image i = imageService.getById(id);
@@ -65,9 +65,9 @@ public class CommentController {
 		c.setImage(i);
 		boolean result = commentService.createComment(c);
 		if (result) {
-			return new ResponseEntity<Comment>(c, HttpStatus.CREATED);
+			return new ResponseEntity<String>("Created comment " + c.getId(), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<Comment>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Could not create comment", HttpStatus.BAD_REQUEST);
 		}
 	}
 
