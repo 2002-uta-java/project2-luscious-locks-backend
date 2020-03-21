@@ -26,6 +26,6 @@ public class UserControllerTest {
 	public void createUserTest() {
 		ResponseEntity<User> result =  userController.getUser("1");
 		assertNotNull(result);
-		assertEquals(result.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, result.getStatusCode());
 	}
 }

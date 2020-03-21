@@ -29,61 +29,64 @@ public class AuthorizationAspect {
 	Logger logger = LoggerFactory.getLogger(AuthorizationAspect.class);
 	@Autowired
 	UserService userService;
-	
+
 	@Before("within(com.revature.controllers.*)")
 	public void logRequest(JoinPoint jp) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes()).getRequest();
-		logger.info(request.getMethod() + " " + request.getRequestURI());
-		logger.info(jp.getSignature().toLongString());
+		logger.info("{} {}", request.getMethod(), request.getRequestURI());
+		if (logger.isInfoEnabled()) {
+			logger.info(jp.getSignature().toLongString());
+		}
 	}
 
-	//@Around("within(com.revature.controllers.*) && !execution(* com.revature.controllers.UserController.populate())")
-	//@Around("within(com.revature.controllers.*) && !within(com.revature.controllers.DebugController.*)")
-	//@Around("within(com.revature.controllers.*) && !within(com.revature.controller.UserController.populate)")
 	@Around("within(com.revature.controllers.*) && !execution(* com.revature.controllers.DebugController.populate())"
 			+ " && !execution(* com.revature.controllers.UserController.createUser(..))"
-			+ " && !execution(* com.revature.controllers.UserController.login(..))"
-			)
+			+ " && !execution(* com.revature.controllers.UserController.login(..))")
 	public Object authorizeRequest(ProceedingJoinPoint jp) throws Throwable {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes()).getRequest();
 		String authHeader = request.getHeader("Authorization");
 		ResponseEntity<Object> unauth = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		if (authHeader != null) {
-			String parts[] = authHeader.split("\\s+");
-			if(parts.length != 2 && "Basic".equals(parts[0])) {
-				logger.info("malformed authorization header: " + authHeader);
+			String[] parts = authHeader.split("\\s+");
+			if (parts.length != 2 && "Basic".equals(parts[0])) {
+				logger.info("malformed authorization header: {}", authHeader);
 				return unauth;
 			}
 			byte[] decoded;
-			try{
+			try {
 				decoded = Base64.getDecoder().decode(parts[1]);
-			} catch(IllegalArgumentException e) {
+			} catch (IllegalArgumentException e) {
 				logger.info("invalidly formatted credentials");
 				return unauth;
 			}
 			String[] creds = new String(decoded).split(":");
-			logger.info("creds = " + creds);
-			if(creds.length != 2) {
+			if (creds.length != 2) {
 				logger.info("username and password not found in credentials");
 				return unauth;
 			}
 			User u = userService.getByUsernameAndPassword(creds[0], creds[1]);
-			if(u == null) {
-				logger.info("invalid username or password with " + creds[0] + " and " + creds[1]);
+			if (u == null) {
+				logger.info("invalid username or password with {} and {}", creds[0], creds[1]);
 				return unauth;
 			}
-			
+
 			logger.info("successful login");
-			
-			if(u.getBanned() == null) { u.setBanned(false); }
-			if(u.getModerator() == null) { u.setModerator(false); }
-			if(u.getMuted() == null) { u.setMuted(false); }
-			
+
+			if (u.getBanned() == null) {
+				u.setBanned(false);
+			}
+			if (u.getModerator() == null) {
+				u.setModerator(false);
+			}
+			if (u.getMuted() == null) {
+				u.setMuted(false);
+			}
+
 			HttpSession session = request.getSession();
 			session.setAttribute("user", u);
-			
+
 			return jp.proceed();
 		} else {
 			logger.info("No authorization header sent");
