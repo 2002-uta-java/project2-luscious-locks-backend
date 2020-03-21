@@ -6,11 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(uniqueConstraints=@UniqueConstraint(columnNames = {"rater_id", "image_id"}))
 public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
