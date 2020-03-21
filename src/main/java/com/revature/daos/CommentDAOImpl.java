@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.revature.models.Comment;
+import com.revature.models.Image;
 import com.revature.utils.HibernateUtil;
 
 public class CommentDAOImpl implements CommentDAO {
@@ -16,6 +17,17 @@ public class CommentDAOImpl implements CommentDAO {
 		try (Session s = HibernateUtil.getSession()) {
 			String hql = "from Comment";
 			Query<Comment> commentQuery = s.createQuery(hql, Comment.class);
+			List<Comment> comments = commentQuery.list();
+			return comments;
+		}
+	}
+
+	@Override
+	public List<Comment> getAllForImage(Image i) {
+		try (Session s = HibernateUtil.getSession()) {
+			String hql = "from Comment where image = :image";
+			Query<Comment> commentQuery = s.createQuery(hql, Comment.class);
+			commentQuery.setParameter("image", i);
 			List<Comment> comments = commentQuery.list();
 			return comments;
 		}
@@ -51,6 +63,9 @@ public class CommentDAOImpl implements CommentDAO {
 	@Override
 	public Comment updateComment(Comment c) {
 		Comment oldComment = getById(c.getId());
+		if(c.getText() != null) {
+			oldComment.setText(c.getText());
+		}
 		if(c.getFlagged() != null) {
 			oldComment.setFlagged(c.getFlagged());
 		}
@@ -74,5 +89,4 @@ public class CommentDAOImpl implements CommentDAO {
 		}
 		return true;
 	}
-
 }
