@@ -50,6 +50,9 @@ public class RatingController {
 	public ResponseEntity<List<Rating>> getRatingsForImage(@PathVariable("id") int id,
 			@RequestParam(name = "all", required = false) Boolean all, HttpSession session) {
 		Image i = imageService.getById(id);
+		if(i == null) {
+			return new ResponseEntity<List<Rating>>(HttpStatus.NOT_FOUND);
+		}
 		List<Rating> allRatings = ratingService.getAllForImage(i);
 		
 		if(all != null && all) {
