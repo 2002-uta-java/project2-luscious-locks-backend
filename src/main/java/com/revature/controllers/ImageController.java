@@ -48,29 +48,29 @@ public class ImageController {
 	public ResponseEntity<Image> getImage(@PathVariable("id") int id) {
 
 		Image i = imageService.getById(id);
-		logger.info("" + i);
+		logger.info("{}", i);
 		if (i == null) {
-			return new ResponseEntity<Image>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Image>(i, HttpStatus.OK);
+		return new ResponseEntity<>(i, HttpStatus.OK);
 	}
 
 	@GetMapping("/users/{id}/images")
 	public ResponseEntity<List<Image>> getImagesForUser(@PathVariable("id") int id) {
 		User poster = userService.getById(id);
 		if (poster == null) {
-			return new ResponseEntity<List<Image>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<List<Image>>(imageService.getForUser(poster), HttpStatus.OK);
+		return new ResponseEntity<>(imageService.getForUser(poster), HttpStatus.OK);
 	}
 
 	@PostMapping("/images")
 	public ResponseEntity<String> createImage(@RequestBody Image i, HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		logger.info("current user = " + user);
+		logger.info("current user = {}", user);
 		i.setPoster(user);
 		boolean result = imageService.createImage(i);
-		logger.info("createImage returned " + result);
+		logger.info("createImage returned {}", result);
 		if (result) {
 			return new ResponseEntity<>("Added image " + i.getId(), HttpStatus.CREATED);
 		} else {
@@ -91,7 +91,7 @@ public class ImageController {
 	@DeleteMapping("/images")
 	public ResponseEntity<String> deleteImage(@RequestBody Image i) {
 		boolean result = imageService.deleteImage(i);
-		logger.debug("deleteImage returned " + result);
+		logger.debug("deleteImage returned {}", result);
 		if (result) {
 			return new ResponseEntity<>("Deleted image " + i.getId(), HttpStatus.OK);
 		} else {
