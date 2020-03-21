@@ -1,6 +1,9 @@
 package com.revature.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Image;
 import com.revature.models.Rating;
+import com.revature.models.User;
 import com.revature.services.ImageService;
 import com.revature.services.RatingService;
 
@@ -37,9 +45,64 @@ public class RatingController {
 		return new ResponseEntity<Rating>(r, HttpStatus.OK);
 
 	}
-	@GetMapping("/ratings/images/{id}")
-	public ResponseEntity<List<Rating>> getRatingsForImage(@PathVariable("id") int id) {
+
+	@GetMapping("/images/{id}/ratings")
+	public ResponseEntity<List<Rating>> getRatingsForImage(@PathVariable("id") int id,
+			@RequestParam(name = "all", required = false) Boolean all, HttpSession session) {
 		Image i = imageService.getById(id);
-		return new ResponseEntity<>(ratingService.getAllForImage(i), HttpStatus.OK);
+		if(i == null) {
+			return new ResponseEntity<List<Rating>>(HttpStatus.NOT_FOUND);
+		}
+		List<Rating> allRatings = ratingService.getAllForImage(i);
+		
+		if(all != null && all) {
+			return new ResponseEntity<>(allRatings, HttpStatus.OK);
+		}
+		
+		User user = (User) session.getAttribute("user");
+		List<Rating> returnedRatings = new ArrayList<>();
+		Rating averageRating = new Rating();
+		Rating usersRating = new Rating();
+		
+		float total = 0;
+		if (!allRatings.isEmpty()) {
+			for (Rating r : allRatings) {
+				total += r.getRating();
+				if (r.getRater().getId() == user.getId()) {
+					usersRating = r;
+				}
+			}
+			averageRating.setRating(total / allRatings.size());
+		}
+		returnedRatings.add(averageRating);
+		returnedRatings.add(usersRating);
+		return new ResponseEntity<>(returnedRatings, HttpStatus.OK);
+	}
+
+	@PostMapping("/images/{id}/ratings")
+	public ResponseEntity<Rating> createRating(@RequestBody Rating r, @PathVariable("id") int id,
+			HttpSession session) {
+		User rater = (User) session.getAttribute("user");
+		Image i = imageService.getById(id);
+		if (i == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		r.setRater(rater);
+		r.setImage(i);
+		boolean result = ratingService.createRating(r);
+		if (result) {
+			return new ResponseEntity<Rating>(r, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Rating>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PutMapping("/ratings/{id}")
+	public ResponseEntity<Rating> updateRating(@RequestBody Rating r, @PathVariable("id") int id) {
+		if (r.getId() > 0 && r.getId() != id) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		r.setId(id);
+		return new ResponseEntity<>(ratingService.updateRating(r), HttpStatus.OK);
 	}
 }

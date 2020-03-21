@@ -1,20 +1,25 @@
 package com.revature.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Table(uniqueConstraints=@UniqueConstraint(columnNames = {"rater_id", "image_id"}))
 public class Rating {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private int rating;
+	@Column(nullable=false)
+	private Float rating;
 	@ManyToOne
 	private User rater;
 	@ManyToOne
@@ -24,23 +29,26 @@ public class Rating {
 		super();
 	}
 	
-	public Rating(int id, int rating, User rater, Image image) {
+	
+	public Rating(int id, Float rating, User rater, Image image) {
 		super();
 		this.id = id;
 		this.rating = rating;
 		this.rater = rater;
 		this.image = image;
 	}
+
+
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getRating() {
+	public Float getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(Float rating) {
 		this.rating = rating;
 	}
 	public User getRater() {
@@ -63,7 +71,7 @@ public class Rating {
 		result = prime * result + id;
 		result = prime * result + ((image == null) ? 0 : image.hashCode());
 		result = prime * result + ((rater == null) ? 0 : rater.hashCode());
-		result = prime * result + rating;
+		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
 		return result;
 	}
 
@@ -88,7 +96,10 @@ public class Rating {
 				return false;
 		} else if (!rater.equals(other.rater))
 			return false;
-		if (rating != other.rating)
+		if (rating == null) {
+			if (other.rating != null)
+				return false;
+		} else if (!rating.equals(other.rating))
 			return false;
 		return true;
 	}
