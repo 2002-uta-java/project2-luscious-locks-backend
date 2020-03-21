@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.User;
@@ -43,6 +44,17 @@ public class UserController {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
 		// u.setImages(null);
+		return new ResponseEntity<User>(u, HttpStatus.OK);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<User> login(@RequestParam("username") String username,
+			@RequestParam("password") String password) {
+		logger.info("controller got username/pw: " + username + " " + password);
+		User u = userService.getByUsernameAndPassword(username, password);
+		if (u == null) {
+			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		}
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 

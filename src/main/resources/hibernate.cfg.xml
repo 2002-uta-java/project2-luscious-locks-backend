@@ -23,5 +23,7 @@
 	<mapping class="com.revature.models.User"/>
 	<mapping class="com.revature.models.Image"/>
 	<mapping class="com.revature.models.Comment"/>
+	<mapping class="com.revature.models.Rating"/>
+	
 	</session-factory>
 </hibernate-configuration>

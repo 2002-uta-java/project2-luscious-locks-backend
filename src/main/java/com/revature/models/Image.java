@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Image implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -20,22 +23,34 @@ public class Image implements Serializable{
 	private int id;
 	@Column(nullable=false)
 	private String url;
-	private boolean isAccepted;
+	private Boolean accepted;
 	private String description;
 	@ManyToOne
 	private User poster;
+	private Boolean flagged;
 
 	public Image() {
 		super();
 	}
 
-	public Image(int id, String url, boolean isAccepted, String description, User poster) {
+	public Image(int id, String url, Boolean accepted, String description, User poster) {
 		super();
 		this.id = id;
 		this.url = url;
-		this.isAccepted = isAccepted;
+		this.accepted = accepted;
 		this.description = description;
 		this.poster = poster;
+	}
+
+	public Image(int id, String url, Boolean accepted, String description, User poster,
+			Boolean flagged) {
+		super();
+		this.id = id;
+		this.url = url;
+		this.accepted = accepted;
+		this.description = description;
+		this.poster = poster;
+		this.flagged = flagged;
 	}
 
 	public int getId() {
@@ -53,13 +68,13 @@ public class Image implements Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	public boolean isAccepted() {
-		return isAccepted;
+
+	public Boolean getAccepted() {
+		return accepted;
 	}
-	
-	public void setAccepted(boolean isAccepted) {
-		this.isAccepted = isAccepted;
+
+	public void setAccepted(Boolean accepted) {
+		this.accepted = accepted;
 	}
 
 	public String getDescription() {
@@ -78,13 +93,22 @@ public class Image implements Serializable{
 		this.poster = poster;
 	}
 
+	public Boolean getFlagged() {
+		return flagged;
+	}
+
+	public void setFlagged(Boolean flagged) {
+		this.flagged = flagged;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((accepted == null) ? 0 : accepted.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((flagged == null) ? 0 : flagged.hashCode());
 		result = prime * result + id;
-		result = prime * result + (isAccepted ? 1231 : 1237);
 		result = prime * result + ((poster == null) ? 0 : poster.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
@@ -99,14 +123,22 @@ public class Image implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Image other = (Image) obj;
+		if (accepted == null) {
+			if (other.accepted != null)
+				return false;
+		} else if (!accepted.equals(other.accepted))
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (id != other.id)
+		if (flagged == null) {
+			if (other.flagged != null)
+				return false;
+		} else if (!flagged.equals(other.flagged))
 			return false;
-		if (isAccepted != other.isAccepted)
+		if (id != other.id)
 			return false;
 		if (poster == null) {
 			if (other.poster != null)
@@ -123,8 +155,8 @@ public class Image implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Image [id=" + id + ", url=" + url + ", isAccepted=" + isAccepted + ", description="
-				+ description + ", poster=" + poster + "]";
+		return "Image [id=" + id + ", url=" + url + ", accepted=" + accepted + ", description="
+				+ description + ", poster=" + poster + ", flagged=" + flagged + "]";
 	}
 	
 	

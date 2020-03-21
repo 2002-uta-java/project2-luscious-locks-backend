@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
-@Table(name="\"User\"")
+@Table(name="\"user\"")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 	@Id
@@ -25,6 +25,7 @@ public class User {
 	private Boolean muted;
 	private Boolean banned;
 	private Boolean moderator;
+	private String warning;
 	
 	public User() {
 		super();
@@ -67,6 +68,12 @@ public class User {
 	public void setModerator(Boolean moderator) {
 		this.moderator = moderator;
 	}
+	public String getWarning() {
+		return warning;
+	}
+	public void setWarning(String warning) {
+		this.warning = warning;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -77,6 +84,7 @@ public class User {
 		result = prime * result + ((muted == null) ? 0 : muted.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((warning == null) ? 0 : warning.hashCode());
 		return result;
 	}
 	@Override
@@ -115,11 +123,16 @@ public class User {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
+		if (warning == null) {
+			if (other.warning != null)
+				return false;
+		} else if (!warning.equals(other.warning))
+			return false;
 		return true;
 	}
 	
 	public User(int id, String username, String password, Boolean muted, Boolean banned,
-			Boolean moderator) {
+			Boolean moderator, String warning) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -127,10 +140,12 @@ public class User {
 		this.muted = muted;
 		this.banned = banned;
 		this.moderator = moderator;
+		this.warning = warning;
 	}
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", muted="
-				+ muted + ", banned=" + banned + ", moderator=" + moderator + "]";
+				+ muted + ", banned=" + banned + ", moderator=" + moderator + ", warning=" + warning
+				+ "]";
 	}
 }
