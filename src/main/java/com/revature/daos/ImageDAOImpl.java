@@ -37,7 +37,11 @@ public class ImageDAOImpl implements ImageDAO{
 			String hql = "from Image where id = :id";
 			Query<Image> imageQuery = s.createQuery(hql, Image.class);
 			imageQuery.setParameter("id", id);
-			return imageQuery.getSingleResult();
+			List<Image> images = imageQuery.list();
+			if(images.isEmpty()) {
+				return null;
+			}
+			return images.get(0);
 		}
 	}
 
