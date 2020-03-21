@@ -91,8 +91,7 @@ public class ImageController {
 	@DeleteMapping("/images")
 	public ResponseEntity<String> deleteImage(@RequestBody Image i) {
 		boolean result = imageService.deleteImage(i);
-		// Debugging code
-		System.out.println("deleteImage returned " + result);
+		logger.debug("deleteImage returned " + result);
 		if (result) {
 			return new ResponseEntity<>("Deleted image " + i.getId(), HttpStatus.OK);
 		} else {
