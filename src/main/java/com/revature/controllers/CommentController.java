@@ -65,7 +65,7 @@ public class CommentController {
 		c.setImage(i);
 		boolean result = commentService.createComment(c);
 		if (result) {
-			return new ResponseEntity<Comment>(c, HttpStatus.OK);
+			return new ResponseEntity<Comment>(c, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<Comment>(HttpStatus.BAD_REQUEST);
 		}

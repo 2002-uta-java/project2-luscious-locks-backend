@@ -50,20 +50,20 @@ public class RatingController {
 	public ResponseEntity<List<Rating>> getRatingsForImage(@PathVariable("id") int id,
 			@RequestParam(name = "all", required = false) Boolean all, HttpSession session) {
 		Image i = imageService.getById(id);
-		if(i == null) {
+		if (i == null) {
 			return new ResponseEntity<List<Rating>>(HttpStatus.NOT_FOUND);
 		}
 		List<Rating> allRatings = ratingService.getAllForImage(i);
-		
-		if(all != null && all) {
+
+		if (all != null && all) {
 			return new ResponseEntity<>(allRatings, HttpStatus.OK);
 		}
-		
+
 		User user = (User) session.getAttribute("user");
 		List<Rating> returnedRatings = new ArrayList<>();
 		Rating averageRating = new Rating();
 		Rating usersRating = new Rating();
-		
+
 		float total = 0;
 		if (!allRatings.isEmpty()) {
 			for (Rating r : allRatings) {
@@ -80,7 +80,7 @@ public class RatingController {
 	}
 
 	@PostMapping("/images/{id}/ratings")
-	public ResponseEntity<Rating> createRating(@RequestBody Rating r, @PathVariable("id") int id,
+	public ResponseEntity<String> createRating(@RequestBody Rating r, @PathVariable("id") int id,
 			HttpSession session) {
 		User rater = (User) session.getAttribute("user");
 		Image i = imageService.getById(id);
@@ -91,9 +91,9 @@ public class RatingController {
 		r.setImage(i);
 		boolean result = ratingService.createRating(r);
 		if (result) {
-			return new ResponseEntity<Rating>(r, HttpStatus.OK);
+			return new ResponseEntity<String>("Created rating " + r.getId(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<Rating>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Could not create rating", HttpStatus.BAD_REQUEST);
 		}
 	}
 
