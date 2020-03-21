@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.revature.models.Image;
+import com.revature.models.User;
 import com.revature.utils.HibernateUtil;
 
 public class ImageDAOImpl implements ImageDAO{
@@ -19,7 +20,17 @@ public class ImageDAOImpl implements ImageDAO{
 			return imageQuery.list();
 		}
 	}
-
+	
+	@Override
+	public List<Image> getAtOrAvoceRating(float rating) {
+		try(Session s = HibernateUtil.getSession()){
+			String sql = "select i.* from image i join rating r on i.id = r.image_id group by i.id having avg(r.rating) >= ?;";
+			Query<Image> imageQuery = s.createNativeQuery(sql, Image.class);
+			imageQuery.setParameter(1, rating);
+			return imageQuery.list();
+		}
+	}
+	
 	@Override
 	public Image getById(int id) {
 		try(Session s = HibernateUtil.getSession()){
@@ -30,6 +41,16 @@ public class ImageDAOImpl implements ImageDAO{
 		}
 	}
 
+	@Override
+	public List<Image> getForUser(User u) {
+		try(Session s = HibernateUtil.getSession()){
+			String hql = "from Image where poster = :poster";
+			Query<Image> imageQuery = s.createQuery(hql, Image.class);
+			imageQuery.setParameter("poster", u);
+			return imageQuery.list();
+		}
+	}
+	
 	@Override
 	public boolean createImage(Image i) {
 		try(Session s = HibernateUtil.getSession()){
@@ -45,9 +66,22 @@ public class ImageDAOImpl implements ImageDAO{
 
 	@Override
 	public Image updateImage(Image i) {
+		Image oldImage = getById(i.getId());
+		if(i.getAccepted() != null) {
+			oldImage.setAccepted(i.getAccepted());
+		}
+		if(i.getFlagged() != null) {
+			oldImage.setFlagged(i.getFlagged());
+		}
+		if(i.getDescription() != null) {
+			oldImage.setDescription(i.getDescription());
+		}
+		if(i.getUrl() != null) {
+			oldImage.setUrl(i.getUrl());
+		}
 		try(Session s = HibernateUtil.getSession()){
 			Transaction tx = s.beginTransaction();
-			Image updatedImage = (Image) s.merge(i);
+			Image updatedImage = (Image) s.merge(oldImage);
 			tx.commit();
 			return updatedImage;
 		}
@@ -65,5 +99,4 @@ public class ImageDAOImpl implements ImageDAO{
 		}
 		return true;
 	}
-
 }

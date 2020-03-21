@@ -3,6 +3,7 @@ package com.revature.auth;
 import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -75,6 +76,14 @@ public class AuthorizationAspect {
 			}
 			
 			logger.info("successful login");
+			
+			if(u.getBanned() == null) { u.setBanned(false); }
+			if(u.getModerator() == null) { u.setModerator(false); }
+			if(u.getMuted() == null) { u.setMuted(false); }
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("user", u);
+			
 			return jp.proceed();
 		} else {
 			logger.info("No authorization header sent");
