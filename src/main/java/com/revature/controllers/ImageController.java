@@ -72,7 +72,7 @@ public class ImageController {
 		boolean result = imageService.createImage(i);
 		logger.info("createImage returned {}", result);
 		if (result) {
-			return new ResponseEntity<>("Added image " + i.getId(), HttpStatus.CREATED);
+			return new ResponseEntity<>("{\"message\": \"Added image " + i.getId() + "\"}", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>("Could not add image", HttpStatus.BAD_REQUEST);
 		}
@@ -88,8 +88,12 @@ public class ImageController {
 	
 	}
 
-	@DeleteMapping("/images")
-	public ResponseEntity<String> deleteImage(@RequestBody Image i) {
+	@DeleteMapping("/images/{id}")
+	public ResponseEntity<String> deleteImage(@PathVariable("id")int id) {
+		Image i = imageService.getById(id);
+		if(i == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		boolean result = imageService.deleteImage(i);
 		logger.debug("deleteImage returned {}", result);
 		if (result) {
