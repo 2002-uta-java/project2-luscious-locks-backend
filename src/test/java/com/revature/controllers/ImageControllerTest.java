@@ -53,7 +53,7 @@ public class ImageControllerTest {
 		Image i = new Image(0, "url", null, "description", null, null);
 		assertTrue(imageService.createImage(i));
 		int id = i.getId();
-		ResponseEntity<String> result = imageController.deleteImage(i);
+		ResponseEntity<String> result = imageController.deleteImage(id);
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNull(imageService.getById(id));
 	}
