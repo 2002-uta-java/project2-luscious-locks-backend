@@ -17,8 +17,7 @@ public class CommentDAOImpl implements CommentDAO {
 		try (Session s = HibernateUtil.getSession()) {
 			String hql = "from Comment";
 			Query<Comment> commentQuery = s.createQuery(hql, Comment.class);
-			List<Comment> comments = commentQuery.list();
-			return comments;
+			return commentQuery.list();
 		}
 	}
 
@@ -28,8 +27,7 @@ public class CommentDAOImpl implements CommentDAO {
 			String hql = "from Comment where image = :image";
 			Query<Comment> commentQuery = s.createQuery(hql, Comment.class);
 			commentQuery.setParameter("image", i);
-			List<Comment> comments = commentQuery.list();
-			return comments;
+			return commentQuery.list();
 		}
 	}
 

@@ -40,9 +40,9 @@ public class RatingController {
 		Rating r;
 		r = ratingService.getById(id);
 		if (r == null) {
-			return new ResponseEntity<Rating>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Rating>(r, HttpStatus.OK);
+		return new ResponseEntity<>(r, HttpStatus.OK);
 
 	}
 
@@ -51,7 +51,7 @@ public class RatingController {
 			@RequestParam(name = "all", required = false) Boolean all, HttpSession session) {
 		Image i = imageService.getById(id);
 		if (i == null) {
-			return new ResponseEntity<List<Rating>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		List<Rating> allRatings = ratingService.getAllForImage(i);
 
@@ -91,9 +91,9 @@ public class RatingController {
 		r.setImage(i);
 		boolean result = ratingService.createRating(r);
 		if (result) {
-			return new ResponseEntity<String>("Created rating " + r.getId(), HttpStatus.CREATED);
+			return new ResponseEntity<>("Created rating " + r.getId(), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Could not create rating", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Could not create rating", HttpStatus.BAD_REQUEST);
 		}
 	}
 

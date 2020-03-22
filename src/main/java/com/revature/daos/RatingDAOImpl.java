@@ -18,8 +18,7 @@ public class RatingDAOImpl implements RatingDAO {
 			String hql = "from Rating where image = :image";
 			Query<Rating> ratingQuery = s.createQuery(hql, Rating.class);
 			ratingQuery.setParameter("image", i);
-			List<Rating> ratings = ratingQuery.list();
-			return ratings;
+			return ratingQuery.list();
 		}
 	}
 

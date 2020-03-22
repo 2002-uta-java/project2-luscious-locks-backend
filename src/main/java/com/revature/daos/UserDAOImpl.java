@@ -16,8 +16,7 @@ public class UserDAOImpl implements UserDAO {
 		try (Session s = HibernateUtil.getSession()) {
 			String hql = "from User";
 			Query<User> userQuery = s.createQuery(hql, User.class);
-			List<User> users = userQuery.list();
-			return users;
+			return userQuery.list();
 		}
 	}
 
@@ -57,7 +56,7 @@ public class UserDAOImpl implements UserDAO {
 			userQuery.setParameter("username", username);
 			userQuery.setParameter("password", password);
 			List<User> users = userQuery.list();
-			if(users.size() == 0) {
+			if(users.isEmpty()) {
 				return null;
 			}
 			return users.get(0);

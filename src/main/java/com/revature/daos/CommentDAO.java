@@ -2,8 +2,6 @@ package com.revature.daos;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-
 import com.revature.models.Comment;
 import com.revature.models.Image;
 
