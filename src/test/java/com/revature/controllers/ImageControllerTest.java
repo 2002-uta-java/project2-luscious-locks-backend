@@ -13,6 +13,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.revature.models.Image;
 import com.revature.models.User;
+import com.revature.services.ImageService;
 import com.revature.services.UserService;
 import com.revature.test.config.TestBeanConfig;
 
@@ -29,6 +30,8 @@ public class ImageControllerTest {
 	private ImageController imageController;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ImageService imageService;
 
 	@Test
 	public void createImageTest() {
@@ -45,4 +48,28 @@ public class ImageControllerTest {
 		result = imageController.createImage(new Image(), session);
 		assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
 	}
+	@Test
+	public void deleteImageTest() {
+		Image i = new Image(0, "url", null, "description", null, null);
+		assertTrue(imageService.createImage(i));
+		int id = i.getId();
+		ResponseEntity<String> result = imageController.deleteImage(i);
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+		assertNull(imageService.getById(id));
+	}
+	/////////////
+/*
+	@GetMapping("/images")
+	public List<Image> getAllImages(@RequestParam(name = "rating", required = false) Float rating) {
+	@GetMapping("/images/{id}")
+	public ResponseEntity<Image> getImage(@PathVariable("id") int id) {
+	@GetMapping("/users/{id}/images")
+	public ResponseEntity<List<Image>> getImagesForUser(@PathVariable("id") int id) {
+	--@PostMapping("/images")
+	--public ResponseEntity<String> createImage(@RequestBody Image i, HttpSession session) {
+	@PutMapping("/images/{id}")
+	public ResponseEntity<Image> updateImage(@RequestBody Image i, @PathVariable("id")int id) {
+	--@DeleteMapping("/images")
+	--public ResponseEntity<String> deleteImage(@RequestBody Image i) {
+*/
 }

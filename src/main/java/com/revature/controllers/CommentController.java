@@ -39,9 +39,9 @@ public class CommentController {
 		Comment c;
 		c = commentService.getById(id);
 		if (c == null) {
-			return new ResponseEntity<Comment>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Comment>(c, HttpStatus.OK);
+		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 
 	@GetMapping("/images/{id}/comments")
@@ -50,7 +50,7 @@ public class CommentController {
 		if (i == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<List<Comment>>(commentService.getAllForImage(i), HttpStatus.OK);
+		return new ResponseEntity<>(commentService.getAllForImage(i), HttpStatus.OK);
 	}
 
 	@PostMapping("/images/{id}/comments")
@@ -65,9 +65,9 @@ public class CommentController {
 		c.setImage(i);
 		boolean result = commentService.createComment(c);
 		if (result) {
-			return new ResponseEntity<String>("Created comment " + c.getId(), HttpStatus.CREATED);
+			return new ResponseEntity<>("Created comment " + c.getId(), HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Could not create comment", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Could not create comment", HttpStatus.BAD_REQUEST);
 		}
 	}
 

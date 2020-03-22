@@ -1,8 +1,5 @@
 package com.revature.controllers;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.http.HttpStatus;
@@ -24,10 +21,6 @@ public class DebugController {
 	public ResponseEntity<String> populate() {
 		try(Session s = HibernateUtil.getSession()){
 			Transaction tx = s.beginTransaction();
-			//s.save(u);
-			
-			//List<Image> il1 = new Vector<>();
-			//il1.add(i1); il1.add(i2);
 			
 			User u1 = new User(0, "brian", "whatev", false, false, false, null);
 			User u2 = new User(0, "israel", "password", false, false, true, "you've been bad");
@@ -47,6 +40,6 @@ public class DebugController {
 			
 			tx.commit();
 		}
-		return new ResponseEntity<String>("done", HttpStatus.OK);
+		return new ResponseEntity<>("done", HttpStatus.OK);
 	}
 }
