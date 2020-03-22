@@ -91,7 +91,7 @@ public class RatingController {
 		r.setImage(i);
 		boolean result = ratingService.createRating(r);
 		if (result) {
-			return new ResponseEntity<>("Created rating " + r.getId(), HttpStatus.CREATED);
+			return new ResponseEntity<>("{\"message\": \"Created rating " + r.getId() + "\"}", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>("Could not create rating", HttpStatus.BAD_REQUEST);
 		}
