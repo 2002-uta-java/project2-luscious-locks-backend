@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.models.Comment;
 import com.revature.models.Image;
+import com.revature.models.Rating;
 import com.revature.models.User;
 import com.revature.services.CommentService;
 import com.revature.services.ImageService;
@@ -103,6 +104,9 @@ public class ImageController {
 		}
 		for(Comment c: commentService.getAllForImage(i)) {
 			commentService.deleteComment(c);
+		}
+		for(Rating r: ratingService.getAllForImage(i)) {
+			ratingService.deleteRating(r);
 		}
 		boolean result = imageService.deleteImage(i);
 		logger.debug("deleteImage returned {}", result);

@@ -66,6 +66,7 @@ public class ImageControllerTest {
 		assertTrue(imageService.createImage(i));
 		int id = i.getId();
 		assertTrue(commentService.createComment(new Comment(0, "deleteImage", null,null,i)));
+		assertTrue(ratingService.createRating(new Rating(0, 2.3f, null, i)));
 		ResponseEntity<String> result = imageController.deleteImage(id);
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNull(imageService.getById(id));

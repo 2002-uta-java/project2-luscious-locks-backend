@@ -22,15 +22,15 @@ public class RatingService {
 		return ratingDAO.getById(id);
 	}
 
-	public boolean createRating(Rating c) {
-		return ratingDAO.createRating(c);
+	public boolean createRating(Rating r) {
+		return ratingDAO.createRating(r);
 	}
 
-	public Rating updateRating(Rating c) {
-		return ratingDAO.updateRating(c);
+	public Rating updateRating(Rating r) {
+		return ratingDAO.updateRating(r);
 	}
 
-	public boolean deleteRating(Rating c) {
-		return ratingDAO.deleteRating(c);
+	public boolean deleteRating(Rating r) {
+		return ratingDAO.deleteRating(r);
 	}
 }
