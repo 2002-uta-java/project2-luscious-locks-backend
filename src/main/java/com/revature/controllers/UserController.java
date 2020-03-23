@@ -48,7 +48,7 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<User> login(@RequestBody User creds) {
 		String username = creds.getUsername();
-		String password = creds.getActualPassword();
+		String password = creds.actualPassword();
 		logger.info("controller got username/pw: {} {}", username, password);
 		User u = userService.getByUsernameAndPassword(username, password);
 		if (u == null) {
