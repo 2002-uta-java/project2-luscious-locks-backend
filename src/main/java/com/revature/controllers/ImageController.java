@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.models.Comment;
 import com.revature.models.Image;
 import com.revature.models.User;
+import com.revature.services.CommentService;
 import com.revature.services.ImageService;
+import com.revature.services.RatingService;
 import com.revature.services.UserService;
 
 @CrossOrigin
@@ -32,7 +35,11 @@ public class ImageController {
 	private ImageService imageService;
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private CommentService commentService;
+	@Autowired
+	private RatingService ratingService;
+	
 	Logger logger = LoggerFactory.getLogger(ImageController.class);
 
 	@GetMapping("/images")
@@ -93,6 +100,9 @@ public class ImageController {
 		Image i = imageService.getById(id);
 		if(i == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		for(Comment c: commentService.getAllForImage(i)) {
+			commentService.deleteComment(c);
 		}
 		boolean result = imageService.deleteImage(i);
 		logger.debug("deleteImage returned {}", result);
