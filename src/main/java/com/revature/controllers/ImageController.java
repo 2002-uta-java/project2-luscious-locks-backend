@@ -111,7 +111,7 @@ public class ImageController {
 		boolean result = imageService.deleteImage(i);
 		logger.debug("deleteImage returned {}", result);
 		if (result) {
-			return new ResponseEntity<>("Deleted image " + i.getId(), HttpStatus.OK);
+			return new ResponseEntity<>("{\"message\": \"Deleted image " + i.getId() + "\"}", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Could not delete image", HttpStatus.BAD_REQUEST);
 		}
