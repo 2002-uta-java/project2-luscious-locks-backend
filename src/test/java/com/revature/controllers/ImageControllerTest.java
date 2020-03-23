@@ -11,9 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.revature.models.Comment;
 import com.revature.models.Image;
 import com.revature.models.Rating;
 import com.revature.models.User;
+import com.revature.services.CommentService;
 import com.revature.services.ImageService;
 import com.revature.services.RatingService;
 import com.revature.services.UserService;
@@ -40,6 +42,8 @@ public class ImageControllerTest {
 	private ImageService imageService;
 	@Autowired
 	private RatingService ratingService;
+	@Autowired
+	private CommentService commentService;
 
 	@Test
 	public void createImageTest() {
@@ -61,6 +65,7 @@ public class ImageControllerTest {
 		Image i = new Image(0, "url", null, "description", null, null);
 		assertTrue(imageService.createImage(i));
 		int id = i.getId();
+		assertTrue(commentService.createComment(new Comment(0, "deleteImage", null,null,i)));
 		ResponseEntity<String> result = imageController.deleteImage(id);
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNull(imageService.getById(id));
