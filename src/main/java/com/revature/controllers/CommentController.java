@@ -34,6 +34,11 @@ public class CommentController {
 
 	Logger logger = LoggerFactory.getLogger(CommentController.class);
 
+	@GetMapping("/comments")
+	public ResponseEntity<List<Comment>> getAllComments() {
+		return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/comments/{id}")
 	public ResponseEntity<Comment> getComment(@PathVariable("id") int id) {
 		Comment c;
