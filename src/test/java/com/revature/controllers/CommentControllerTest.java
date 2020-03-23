@@ -107,6 +107,23 @@ public class CommentControllerTest {
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNull(commentService.getById(id));
 	}
+	@Test
+	public void getAllCommentsTest() {
+		HttpSession session = new MockHttpSession();
+		
+		Image i = new Image(0, "getAllComments", null, "desc", null, null);
+		imageService.createImage(i);
+		assertNotEquals(0, i.getId());
+		
+		Comment c = new Comment();
+		c.setText("getAllComments");
+		ResponseEntity<String> result = commentController.createComment(c, c.getId(), session);
+		assertNotNull(result);
+		
+		ResponseEntity<List<Comment>> result2 = commentController.getAllComments();
+		assertEquals(HttpStatus.OK, result2.getStatusCode());
+		assertTrue(result2.getBody().size() >= 1);
+	}
 	/////////////////
 	/*
 		--@GetMapping("/comments/{id}")
