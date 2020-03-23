@@ -94,7 +94,7 @@ public class CommentController {
 		}
 		boolean result = commentService.deleteComment(c);
 		if (result) {
-			return new ResponseEntity<>("Delete comment " + c.getId(), HttpStatus.OK);
+			return new ResponseEntity<>("{\"message\": \"Delete comment " + c.getId() + "\"}", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("Could not delete comment", HttpStatus.BAD_REQUEST);
 		}
