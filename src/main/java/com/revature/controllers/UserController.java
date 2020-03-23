@@ -62,7 +62,7 @@ public class UserController {
 		boolean result = userService.createUser(u);
 		logger.info("createUser returned {}", result);
 		if (result) {
-			return new ResponseEntity<>("Added user " + u.getUsername(), HttpStatus.CREATED);
+			return new ResponseEntity<>("{\"message\": \"Added user " + u.getId() + "\"}", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>("Could not add user", HttpStatus.BAD_REQUEST);
 		}

@@ -34,6 +34,11 @@ public class CommentController {
 
 	Logger logger = LoggerFactory.getLogger(CommentController.class);
 
+	@GetMapping("/comments")
+	public ResponseEntity<List<Comment>> getAllComments() {
+		return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/comments/{id}")
 	public ResponseEntity<Comment> getComment(@PathVariable("id") int id) {
 		Comment c;
@@ -65,7 +70,7 @@ public class CommentController {
 		c.setImage(i);
 		boolean result = commentService.createComment(c);
 		if (result) {
-			return new ResponseEntity<>("Created comment " + c.getId(), HttpStatus.CREATED);
+			return new ResponseEntity<>("{\"message\": \"Created comment " + c.getId() + "\"}", HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>("Could not create comment", HttpStatus.BAD_REQUEST);
 		}
